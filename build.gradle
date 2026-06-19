@@ -36,23 +36,23 @@ tasks.register('buildPack', Zip) {
 
     from(sourceDir) {
         // 只对 mcmod.info 进行占位符替换
-        include 'mcmod.info'
+        include 'rml.info'
         expand(
                 mod_version: modVersion,
                 mod_id: modId,
                 mod_name: modName,
                 mod_description: modDescription,
                 mod_url: modUrl,
-                mod_authors: authorsList,          // 传递列表，自动转为 JSON 数组
+                mod_authors: authorsList,
                 mod_credits: modCredits,
                 mod_logo_path: modLogoPath,
-                mod_dependencies: modDependencies  // 若需要，可在 mcmod.info 中使用
+                mod_dependencies: modDependencies
         )
     }
 
     from(sourceDir) {
         // 其他所有文件直接复制（不进行过滤）
-        exclude 'mcmod.info'
+        exclude 'rml.info'
     }
 
     doLast {
