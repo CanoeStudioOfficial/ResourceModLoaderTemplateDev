@@ -24,6 +24,9 @@ ext {
     sourceDir = project.findProperty('sourceDir') ?: 'src/main/resources'
     outputDir = project.findProperty('outputDir') ?: 'build/libs'
     mcModsDir = project.findProperty('mcModsDir') ?: "${System.getProperty('user.home')}/.minecraft/mods"
+
+    // 输出文件扩展名（jar 或 zip）
+    outputExtension = props.getProperty('output_extension', 'jar')
 }
 
 // 将作者字符串按逗号分割为列表
@@ -31,11 +34,11 @@ def authorsList = modAuthorsRaw.split(',').collect { it.trim() }.findAll { !it.i
 
 // 打包任务
 tasks.register('buildPack', Zip) {
-    archiveFileName = "${modName}-${modVersion}.jar"
+    archiveFileName = "${modName}-${modVersion}.${outputExtension}"
     destinationDirectory = file(outputDir)
 
     from(sourceDir) {
-        // 只对 mcmod.info 进行占位符替换
+        // 只对 rml.info 进行占位符替换
         include 'rml.info'
         expand(
                 mod_version: modVersion,
