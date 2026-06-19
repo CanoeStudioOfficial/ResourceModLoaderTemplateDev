@@ -1,13 +1,22 @@
-
 plugins {
     id 'base'
 }
 
+// 从 gradle.properties 读取属性（也可通过 -P 命令行覆盖）
+def props = new Properties()
+file('gradle.properties').withInputStream { props.load(it) }
 
 ext {
-    modName = project.findProperty('modName') ?: 'MyPack'
-    modVersion = project.findProperty('modVersion') ?: '1.0.0'
-    modNamespace = project.findProperty('modNamespace') ?: 'mymod'
+    modVersion = props.getProperty('mod_version', '1.0.0')
+    modId      = props.getProperty('mod_id', 'modid')
+    modName    = props.getProperty('mod_name', 'Mod Name')
+    // 其他可选属性可按需添加
+    modDescription = props.getProperty('mod_description', '')
+    modUrl         = props.getProperty('mod_url', '')
+    modAuthors     = props.getProperty('mod_authors', '')
+    modCredits     = props.getProperty('mod_credits', '')
+    modLogoPath    = props.getProperty('mod_logo_path', '')
+
     sourceDir = project.findProperty('sourceDir') ?: 'src/main/resources'
     outputDir = project.findProperty('outputDir') ?: 'build/libs'
     mcModsDir = project.findProperty('mcModsDir') ?: "${System.getProperty('user.home')}/.minecraft/mods"
@@ -17,8 +26,21 @@ tasks.register('buildPack', Zip) {
     archiveFileName = "${modName}-${modVersion}.jar"
     destinationDirectory = file(outputDir)
 
-    from sourceDir
-    include '**/*'
+    from(sourceDir) {
+        // 过滤所有文件（但最好只过滤 mcmod.info，避免误伤其他资源）
+        include '**/*'
+        // 使用 expand 替换占位符，属性来源是 ext 中的变量
+        expand(
+                mod_version: modVersion,
+                mod_id: modId,
+                mod_name: modName,
+                mod_description: modDescription,
+                mod_url: modUrl,
+                mod_authors: modAuthors,
+                mod_credits: modCredits,
+                mod_logo_path: modLogoPath
+        )
+    }
 
     doLast {
         copy {
