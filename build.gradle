@@ -1,9 +1,9 @@
-// build.gradle
+
 plugins {
     id 'base'
 }
 
-// 一次性读取所有属性
+
 ext {
     modName = project.findProperty('modName') ?: 'MyPack'
     modVersion = project.findProperty('modVersion') ?: '1.0.0'

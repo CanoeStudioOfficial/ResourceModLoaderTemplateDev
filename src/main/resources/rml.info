@@ -1,93 +1,12 @@
-[
-  {
-    "pack_version":3,
-    "modid": "rml_example",
-    "name": "RML Example Mod",
-    "description": "The Example Mod for RML!",
-    "version": "dev",
-    "mcversion": "1.12.2",
-    "authorList": [
-      "Hileb"
-    ],
-    "credits": "RML -provide this example",
-    "useDependencyInformation":true,
-    "dependencies": [
-      "required:crafttweaker"
-    ],
-    "modules":[
-      {
-        "name":"rml:CONFIG_OVERRIDE",
-        "location":"mods/forge/config/override",
-        "forceLoaded":true
-      },
-      {
-        "name":"rml:CONFIG_REDEFAULT",
-        "location":"mods/forge/config/redefault",
-        "forceLoaded":true
-      },
-      {
-         "name":"rml:CONFIG_DEFINE",
-         "location":"mods/forge/config/define",
-         "forceLoaded":true
-      },
-      {
-        "name":"rml:MOD_CRT",
-        "location":"mods/crt/scripts",
-        "forceLoaded":true
-      },
-      {
-        "name":"rml:FUNCTIONS",
-        "location":"mods/minecraft/functions",
-        "forceLoaded":true
-      },
-      {
-        "name":"rml:MOD_KUBEJS",
-        "location":"mods/kubejs/scripts",
-        "forceLoaded":true
-      },
-      {
-        "name":"rml:LOOT_TABLES",
-        "location":"mods/minecraft/loot_tables",
-        "forceLoaded":true
-      },
-      {
-        "name":"rml:ORE_DIC",
-        "location":"mods/forge/ore_dic",
-        "forceLoaded":true
-      },
-      {
-        "name":"rml:REGISTRY_REMAP",
-        "location":"mods/forge/registry/remap",
-        "forceLoaded":true
-      },
-      {
-        "name":"rml:SPLASH_TEXT",
-        "location":"mods/minecraft/text/splash_text.txt",
-        "forceLoaded":true
-      },
-      {
-         "name":"rml:MOD_GROOVY_SCRIPT",
-         "location":"mods/groovy_script/run_config.json",
-         "forceLoaded":true
-      },
-      {
-          "name" : "rml:config_nodes",
-          "location":"mods/forge/config/nodes/config.json",
-          "forceLoaded":true
-      }
-    ]
-  },
-  {
-    "modid": "rml_example_legacy",
-    "name": "RML Example legacy",
-    "description": "The Example Mod for RML! But the format is Legacy",
-    "version": "legacy",
-    "mcversion": "1.12.2",
-    "authorList": [
-      "Hileb"
-    ],
-    "credits": "RML -provide this example",
-    "screenshots": [],
-    "dependencies": []
-  }
-]
+[{
+	"modid": "${mod_id}",
+	"name": "${mod_name}",
+	"version": "${mod_version}",
+	"mcversion": "1.12.2",
+	"description": "${mod_description}",
+	"authorList": ["${mod_authors}"],
+	"credits": "${mod_credits}",
+	"url": "${mod_url}",
+	"logoFile": "${mod_logo_path}"
+    "dependencies": ["required:crafttweaker"],
+}]
