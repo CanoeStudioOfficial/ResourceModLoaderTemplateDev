@@ -1,0 +1,32 @@
+// build.gradle
+plugins {
+    id 'base'
+}
+
+// 一次性读取所有属性
+ext {
+    modName = project.findProperty('modName') ?: 'MyPack'
+    modVersion = project.findProperty('modVersion') ?: '1.0.0'
+    modNamespace = project.findProperty('modNamespace') ?: 'mymod'
+    sourceDir = project.findProperty('sourceDir') ?: 'src/main/resources'
+    outputDir = project.findProperty('outputDir') ?: 'build/libs'
+    mcModsDir = project.findProperty('mcModsDir') ?: "${System.getProperty('user.home')}/.minecraft/mods"
+}
+
+tasks.register('buildPack', Zip) {
+    archiveFileName = "${modName}-${modVersion}.jar"
+    destinationDirectory = file(outputDir)
+
+    from sourceDir
+    include '**/*'
+
+    doLast {
+        copy {
+            from archiveFile
+            into file(mcModsDir)
+        }
+        println "打包完成: ${archiveFileName.get()} -> ${mcModsDir}"
+    }
+}
+
+defaultTasks 'buildPack'
