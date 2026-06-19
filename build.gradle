@@ -2,44 +2,57 @@ plugins {
     id 'base'
 }
 
-// 从 gradle.properties 读取属性（也可通过 -P 命令行覆盖）
+// 读取 gradle.properties
 def props = new Properties()
 file('gradle.properties').withInputStream { props.load(it) }
 
 ext {
+    // 基础信息
     modVersion = props.getProperty('mod_version', '1.0.0')
     modId      = props.getProperty('mod_id', 'modid')
     modName    = props.getProperty('mod_name', 'Mod Name')
-    // 其他可选属性可按需添加
+
+    // 元数据
     modDescription = props.getProperty('mod_description', '')
     modUrl         = props.getProperty('mod_url', '')
-    modAuthors     = props.getProperty('mod_authors', '')
+    modAuthorsRaw  = props.getProperty('mod_authors', '')
     modCredits     = props.getProperty('mod_credits', '')
     modLogoPath    = props.getProperty('mod_logo_path', '')
+    modDependencies = props.getProperty('mod_dependencies', '')
 
+    // 目录配置（允许命令行覆盖）
     sourceDir = project.findProperty('sourceDir') ?: 'src/main/resources'
     outputDir = project.findProperty('outputDir') ?: 'build/libs'
     mcModsDir = project.findProperty('mcModsDir') ?: "${System.getProperty('user.home')}/.minecraft/mods"
 }
 
+// 将作者字符串按逗号分割为列表
+def authorsList = modAuthorsRaw.split(',').collect { it.trim() }.findAll { !it.isEmpty() }
+
+// 打包任务
 tasks.register('buildPack', Zip) {
     archiveFileName = "${modName}-${modVersion}.jar"
     destinationDirectory = file(outputDir)
 
     from(sourceDir) {
-        // 过滤所有文件（但最好只过滤 mcmod.info，避免误伤其他资源）
-        include '**/*'
-        // 使用 expand 替换占位符，属性来源是 ext 中的变量
+        // 只对 mcmod.info 进行占位符替换
+        include 'mcmod.info'
         expand(
                 mod_version: modVersion,
                 mod_id: modId,
                 mod_name: modName,
                 mod_description: modDescription,
                 mod_url: modUrl,
-                mod_authors: modAuthors,
+                mod_authors: authorsList,          // 传递列表，自动转为 JSON 数组
                 mod_credits: modCredits,
-                mod_logo_path: modLogoPath
+                mod_logo_path: modLogoPath,
+                mod_dependencies: modDependencies  // 若需要，可在 mcmod.info 中使用
         )
+    }
+
+    from(sourceDir) {
+        // 其他所有文件直接复制（不进行过滤）
+        exclude 'mcmod.info'
     }
 
     doLast {
